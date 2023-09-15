@@ -1,0 +1,79 @@
+﻿@model IDictionary<Employee, List<Vacation>>
+@{
+    ViewData["Title"] = "GetVacations";
+    int number = 1;
+}
+
+<div>
+    <table class="table table-primary table-hover">
+        <tr align="center">
+            <td>№</td>
+            <th>ФИО</th>
+            <th>Должность</th>
+            <th>Пол</th>
+            <th>Возраст</th>
+            <th>Начало отпуска</th>
+            <th>Окончание отпуска</th>
+            <th>####</th>
+        </tr>
+        @foreach (var vacations in Model)
+        {
+            <tr align="center">
+                <td>@(number++)</td>
+                <td>@vacations.Key.Name</td>
+                <td>@vacations.Key.Position.GetDisplayName()</td>
+                <td>@vacations.Key.Gender.GetDisplayName()</td>
+                <td>@vacations.Key.Age</td>
+                <td colspan="2">
+                    <div class="row">
+                        @foreach (var vacation in vacations.Value)
+                        {
+                            <div class="col-md-6">
+                                <small>@vacation.Start.ToShortDateString()</small>
+                            </div>
+                            <div class="col-md-6">
+                                <small>@vacation.End.ToShortDateString()</small>
+                            </div>
+                        }
+
+                        <button class="btn" onclick="openAddVacationModal('@vacations.Key.Id')">Добавить отпуск</button>
+                    </div>
+                </td>
+                <td>
+                    <div class="dropdown">
+                        <a class="nav-link text-dark dropdown-toggle"
+                           data-bs-toggle="dropdown" href="#">
+                            Пересечения
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item">
+                                <a class="nav-link text-black"
+                                   onclick="showModal({url:'@Url.Action("GetCrossingVacationsByEmployeePositionAndAge", "Home")', data: '@vacations.Key.Id'})">
+                                    Пересечение отпуска с сотрудниками моего отдела. Сотрудники моложе 30 лет.
+                                </a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="nav-link text-black"
+                                   onclick="showModal({url:'@Url.Action("GetCrossingVacationsByFemaleGenderNotMyPosition", "Home")', data: '@vacations.Key.Id'})">
+                                    Пересечение отпуска с сотрудниками-женщинами не из моего отдела. Возраст сотрудников - старше 30, но моложе 50.
+                                </a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="nav-link text-black"
+                                   onclick="showModal({url:'@Url.Action("GetCrossingVacationsByAllPosition", "Home")', data: '@vacations.Key.Id'})">
+                                    Пересечение отпуска с сотрудниками из любого отдела. Возраст сотрудников - старше 50 лет.
+                                </a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="nav-link text-black"
+                                   onclick="showModal({url:'@Url.Action("GetVacationsWithoutCrossing", "Home")', data: '@vacations.Key.Id'})">
+                                    Отпуска без пересечения.
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

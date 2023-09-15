@@ -1,0 +1,23 @@
+﻿@model VacationViewModel
+
+<div id="modalContainer">
+    <form id="addVacationForm">
+        <div>
+            <label asp-for="Start">Дата начала</label>
+            <input asp-for="Start" type="date" class="form-control" value="" name="Start" />
+        </div>
+        <div>
+            <label asp-for="End">Дата окончания</label>
+            <input asp-for="End" type="date" class="form-control" value="" name="End" />
+            <span asp-validation-for="End" class="text-danger"></span>
+        </div>
+        <div class="visually-hidden">
+            <label asp-for="End">Сотрудник</label>
+            <input asp-for="EmployeeId" class="form-control" name="EmployeeId" />
+        </div>
+        <br />
+        <div>
+            <button class="btn btn-outline-primary btn-lg" type="submit">Добавить</button>
+        </div>
+    </form>
+</div>
